@@ -5,16 +5,16 @@ const User = require('../models/user.model')
  * Verify if the user exist in the database else create user
  * @params (req, res)
  */
-module.exports.createUser = async(req, res) =>{
+module.exports.createUser = async(req, res, next) =>{
     try{
-        const user = await User.find({email: req.body.email})
-        if(user) return res.status(404).json({status: "failed", msg: "User already exits"})
-
+        const user = await User.findOne({email: req.body.email})
+        if(user) return res.status(404).json({status: "failed", msg: "User already exits", user})
+        
         const newUser = await User.create(req.body)
         res.status(201).json({status: "success", data: newUser})
 
-    }catch(e){
-
+    }catch(err){
+        next({msg: "Oops! something went wrong couldn't create user", err})
     }
 }
 
@@ -23,13 +23,13 @@ module.exports.createUser = async(req, res) =>{
  * @function getUsers for getting the list of users
  * @params (req, res)
  */
-module.exports.getUsers = async(req, res) =>{
+module.exports.getUsers = async(req, res, next) =>{
     try{
         const user = await User.find({})
         res.status(201).json({status: "success", data: user})
 
-    }catch(e){
-
+    }catch(err){
+        next({msg: "Oops! something went wrong couldn't get users", err})
     }
 }
 
@@ -39,7 +39,7 @@ module.exports.getUsers = async(req, res) =>{
  * if true get the user
  * @params (req, res)
  */
-module.exports.getUser = async(req, res) =>{
+module.exports.getUser = async(req, res, next) =>{
     try{
         const {id} = req.params
         const user = await User.findById(id)
@@ -47,8 +47,8 @@ module.exports.getUser = async(req, res) =>{
 
         res.status(200).json({status: "success", data: user})
 
-    }catch(e){
-
+    }catch(err){
+        next({msg: "Oops! something went wrong couldn't get user", err})
     }
 }
 
@@ -58,7 +58,7 @@ module.exports.getUser = async(req, res) =>{
  * if true updates the user
  * @params (req, res)
  */
-module.exports.updateUser = async(req, res) =>{
+module.exports.updateUser = async(req, res, next) =>{
     try{
         const {id} = req.params
         const user = await User.findById(id)
@@ -67,8 +67,8 @@ module.exports.updateUser = async(req, res) =>{
         const updatedUser = await User.findByIdAndUpdate(id, {$set:req.body}, {new: true})
         res.status(200).json({status: "success", data: updatedUser})
 
-    }catch(e){
-
+    }catch(err){
+        next({msg: "Oops! something went wrong couldn't update user", err})
     }
 }
 
@@ -79,15 +79,15 @@ module.exports.updateUser = async(req, res) =>{
  * if true delete the user
  * @params (req, res)
  */
-module.exports.removeUser = async(req, res) =>{
+module.exports.removeUser = async(req, res, next) =>{
     try{
         const {id} = req.params
         const user = await User.findByIdAndRemove(id)
         if(!user) return res.status(404).json({status: "failed", msg: "User not found"})
 
-        res.status(200).json({status: "success", data: user})
+        res.status(200).json({status: "success", data: user, msg: "User deleted succesfully"})
 
-    }catch(e){
-
+    }catch(err){
+        next({msg: "Oops! something went wrong couldn't remove user", err})
     }
 }

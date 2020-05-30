@@ -14,6 +14,10 @@ const userSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
+    phone_number:{
+        type: String,
+        required: true
+    },
     password:{
         type: String,
         required: true
@@ -23,10 +27,6 @@ const userSchema = new mongoose.Schema({
     },
     country:{
         type: String,
-    },
-    phone_number:{
-        type: String,
-        required: true
     },
     status:{
         type: String,
@@ -38,3 +38,5 @@ const userSchema = new mongoose.Schema({
         type: [String]
     },
 }, {timestamps: true})
+
+module.exports  = mongoose.model('user', userSchema)
