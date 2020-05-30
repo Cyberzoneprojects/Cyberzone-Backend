@@ -16,7 +16,7 @@ const exerciseSchema = new mongoose.Schema({
     isAnswered: {
         type: Boolean
     }
-})
+}, {timeseries: true})
 
 
 module.exports = mongoose.model('exercise', exerciseSchema)
