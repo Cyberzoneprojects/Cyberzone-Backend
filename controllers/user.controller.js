@@ -123,18 +123,51 @@ module.exports.subscribe = async(req, res, next) =>{
     }
 }
 
+
+/**
+ * @function requestResetPassword 
+ * verify's if the user is in the system
+ * creates a reset token then saves the hash in the database
+ * @params (req, res)
+ */
 module.exports.requestResetPassword = async(req, res, next) =>{
-    const {email} = req.body
+     try{
+        const {email} = req.body
+        const user = await User.findOne({email})
+        if (!user) throw new Error("User does not exist");
 
-    const user = await User.findOne({email})
-    if (!user) throw new Error("User does not exist");
+        // const token = await Token.findOne({userId: user._id})
+        // if(token) await token.deleteOne()
 
-    const token = await Token.findOne({userId: user._id})
-    if(token) await token.deleteOne()
+        const resetToken = crypto.randomBytes(32).toString('hex')
+        const salt = await bcrypt.genSalt(10)
+        const hash = await bcrypt.hash(resetToken, salt)
+        await User.findByIdAndUpdate(id, {$set: {resetToken: hash}});
+        
+        const link = `${clientURL}/passwordReset?token=${resetToken}&id=${user._id}`;
+        sendEmail(user.email,"Password Reset Request",{name: user.name,link: link,}, "./template/requestResetPassword.handlebars");
+    
 
-    // const resetToken = crypto.randomBytes(32).toString('hex')
-    // const salt = await bcrypt.genSalt(10)
-    // const hash = await bcrypt.hash(resetToken, salt)
-    const link = `${clientURL}/passwordReset?token=${resetToken}&id=${user._id}`;
-    sendEmail(user.email,"Password Reset Request",{name: user.name,link: link,}, "./template/requestResetPassword.handlebars");
+    }catch(err){
+        next({msg: "Oops! something went wrong couldn't request a password reset", err})
+    }
+}
+module.exports.passwordReset = async(req, res, next) =>{
+     try{
+        const {userId, resetToken, password} = req.body
+        const user = await User.findById(userId)
+        if (!user) throw new Error("User does not exist");
+
+        const isValid = await bcrypt.compare(resetToken, user.resetToken)
+        if(!isValid) throw new Error("Invalid reset token");
+
+        const salt = await bcrypt.genSalt(10)
+        const hashedPassword = await bcrypt.hash(password, salt)
+        await User.findByIdAndUpdate(userId, {$set:{password: hashedPassword}})
+
+        res.status(200).json({status: "success", data: user, msg: "Password reset successfully"})
+
+    }catch(err){
+        next({msg: "Oops! something went wrong couldn't request a password reset", err})
+    }
 }
