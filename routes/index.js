@@ -1,12 +1,16 @@
+
 const router = require('express').Router()
+const moduleRoute = require('./module.routes')
+const unitRoute = require('./unit.routes')
 const userRoutes = require('./user.routes')
 const exerciseRoutes = require('./exercise.routes')
 
 module.exports = () =>{
     
+    router.use('/module', moduleRoute())
+    router.use('/unit', unitRoute())
+    
     router.use('/user', userRoutes())
     router.use('/exercise', exerciseRoutes())
-
-
     return router
 }

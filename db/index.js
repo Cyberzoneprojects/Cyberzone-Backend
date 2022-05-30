@@ -1,8 +1,12 @@
+
 const mongoose = require('mongoose')
-const {PORT, MONGO_URL} = require('../config/default')
+require('dotenv').config();
+
+const PORT = process.env.PORT
+const DATABASE = process.env.DATABASE
 
 module.exports = (app) =>{
-    mongoose.connect(MONGO_URL, 
+    mongoose.connect(DATABASE, 
         {
             useUnifiedTopology: true
         }, (err)=>{
