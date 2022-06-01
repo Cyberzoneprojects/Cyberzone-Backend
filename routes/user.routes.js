@@ -7,5 +7,7 @@ module.exports = () =>{
     router.get("/:id", userController.getUser)
     router.put("/:id/update", userController.updateUser)
     router.delete("/:id/remove", userController.removeUser)
+
+    router.put("/subscribe", userController.subscribe)
     return router
 }
