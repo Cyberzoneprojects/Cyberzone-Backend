@@ -15,6 +15,9 @@ const moduleSchema = new mongoose.Schema({
     },
     units:{
         type:String
+    },
+    serviceID:{
+        type:String
     }
 })
 
