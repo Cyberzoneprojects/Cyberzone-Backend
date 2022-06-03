@@ -1,4 +1,5 @@
 const Exercise = require('../models/exercise.model')
+const Unit = require('../models/unit.model')
 
 /**
  * @function createExercise for creating a new exercise
@@ -7,10 +8,14 @@ const Exercise = require('../models/exercise.model')
  */
 module.exports.createExercise = async(req, res, next) =>{
     try{
+        const {unitId} = req.body
+
         const exercise = await Exercise.findOne({email: req.body.email})
         if(exercise) return res.status(404).json({status: "failed", msg: "Exercise already exits", exercise})
         
         const newExercise = await Exercise.create(req.body)
+        await Unit.findByIdAndUpdate(unitId, {$addToSet: {exercises: newExercise._id}})
+
         res.status(201).json({status: "success", data: newExercise})
 
     }catch(err){
