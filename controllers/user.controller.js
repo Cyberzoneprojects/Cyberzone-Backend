@@ -1,7 +1,5 @@
 const User = require('../models/user.model')
 const Service = require('../models/service.model')
-const bcrypt = require('bcrypt')
-const generateToken = require('../utils/generateToken')
 
 require('dotenv').config()
 
@@ -122,32 +120,3 @@ module.exports.subscribe = async(req, res, next) =>{
     }
 }
 
-/**
- * @function login to a service
- * Verify if the user exist in the database 
- * Verify password
- * if true 
- * @params (req, res)
- */
-module.exports.login = async(req, res, next) =>{
-    try{
-        const {email, password} = req.body
-
-        const user = await User.findOne({email})
-        if(!user) return res.status(404).json({status: "failed", msg: "User not found invalid email"})
-       
-        const isPassword = await bcrypt.compare(password, user.password)
-        if(!isPassword) return res.status(404).json({status: "failed", msg: "Invalid password"})
-        
-        const accessToken = generateToken(user._id, email, process.env.SECRET_KEY)
-        const refreshToken = generateToken(user._id, email, process.env.REFRESH_KEY, '7d')
-        
-        const newUser = await User.findByIdAndUpdate(user._id, {$set:{refreshToken}}, {new: true})
-        
-        res.status(200).json({status: "success", data: {...newUser._doc, accessToken, refreshToken}, msg: "Login succesfull"})
-
-
-    }catch(err){
-        next({msg: "Oops! something went wrong couldn't login user", err})
-    }
-}

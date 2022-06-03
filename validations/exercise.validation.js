@@ -1,6 +1,10 @@
 const Joi = require('joi')
-const { handleErrorMessage } = require('../utils/handleErrorMessage')
+const { validation } = require('../utils/validation')
 
 const schema = Joi.object({
-    
+    unitId: Joi.string().required(),
 })
+
+module.exports.validateCreateExercise = (req, res, next) =>{
+    validation(schema, req, res, next)
+}

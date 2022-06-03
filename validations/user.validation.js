@@ -1,6 +1,8 @@
 const Joi = require('joi')
-const { handleErrorMessage } = require('../utils/handleErrorMessage')
+const { validation } = require('../utils/validation')
 
+
+// Schemas
 const registrationSchema = Joi.object({
     first_name: Joi.string().alphanum().min(3).max(30).required(),
     last_name: Joi.string().alphanum().min(3).max(30).required(),
@@ -13,15 +15,21 @@ const registrationSchema = Joi.object({
     status: Joi.string(),
     address: Joi.string(),
 })
+const tokenSchema = Joi.object({
+    email: Joi.string().email().required(),
+    refreshToken: Joi.string().required(),
+})
+
+
+
+
+// validation middlewares
 
 module.exports.userValidation = (req, res, next)=>{
-    const {error} = registrationSchema.validate(req.body)
-    if(error.details){
-        const errorMessage = handleErrorMessage(error.details[0])
-        console.log(errorMessage)
-        return res.status(400).send(errorMessage)
-        
-    }
-    // console.log(value)
-    next()
+    validation(registrationSchema, req, res, next)
+}
+
+
+module.exports.validateToken = (req, res, next)=>{
+    validation(tokenSchema, req, res, next)
 }
