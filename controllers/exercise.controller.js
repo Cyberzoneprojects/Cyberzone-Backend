@@ -7,6 +7,9 @@ const Exercise = require('../models/exercise.model')
  */
 module.exports.createExercise = async(req, res, next) =>{
     try{
+        const {unitId} = req.body
+        
+        
         const exercise = await Exercise.findOne({email: req.body.email})
         if(exercise) return res.status(404).json({status: "failed", msg: "Exercise already exits", exercise})
         

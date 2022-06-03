@@ -13,9 +13,7 @@ const unitSchema = new mongoose.Schema({
     time_spent:{
         type: String
     },
-    excercise:{
-        type:String
-    },
+    excercises:[String],
     isViewed:{
         type:Boolean
     },
