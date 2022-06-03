@@ -1,3 +1,4 @@
+const { model } = require('mongoose');
 const Units = require('../models/unit.model')
 
 
@@ -30,12 +31,12 @@ module.exports.saveUnit = async(req,res, next)=>{
 
 */
 
-module.exports.fetchUnits = (req, res)=>{
+module.exports.fetchUnits = async(req, res)=>{
     Units.find({}, (err, units)=>{
         if(err){
-            return res.status(400).json({success: false, error: er})
+            return res.status(400).json({success: false, error: err})
         }
-        if(!units.lenght){
+        if(units.lenght){
             return res.status(404).json({success:false, error:"Oops No modules found"})
         }
         return res.status(200).json({success:true, data:units})
@@ -64,10 +65,30 @@ module.exports.fetchUnit = async(req, res)=>{
 }
 
 
+/* 
+
+@function to get units of a specified model
+
+
+*/
+
+module.exports.moduleUnits = async(req, res)=>{
+    const {id} = req.params
+    Units.find({moduleID: id}, (err, units)=>{
+        if(err){
+            return res.status(400).json({success: false, error: err})
+        }
+        if(units.lenght){
+            return res.status(404).json({success:false, error:"Oops No Units found"})
+        }
+        return res.status(200).json({success:true, data:units})
+    })
+};
+
 /*
  * @function deleting a unit if exist
  * @params(req,res, next)
-
+ *
 */
 module.exports.deleteUnit = (req, res, next) => {
     Units.findByIdAndRemove(

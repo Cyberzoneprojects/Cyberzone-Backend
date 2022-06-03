@@ -13,12 +13,9 @@ const moduleSchema = new mongoose.Schema({
     time_spent:{
         type: String
     },
-    units:{
-        type:String
-    },
     serviceID:{
         type:String
     }
-})
+}, {timestamps: true})
 
 module.exports = mongoose.model('module', moduleSchema);

@@ -64,23 +64,21 @@ module.exports.fetchModule = async(req, res)=>{
 
 
 /*
- * @function getting modules for a particular service
+ * @function fetch modules for a particular service
  * @params(req,res)
 
 */
 module.exports.fetchModuleOfService = async(req, res, next)=>{
     const {id} = req.params
-    Modules.findById(id)
-    try{
-        const {id} = req.params
-        const modul = await Modules.findById(id)
-        if(!modul) return res.status(404).json({status: "failed", msg: "Exercise not found"})
-
-        res.status(200).json({status: "success", data: modul})
-
-    }catch(err){
-        next({msg: "Oops! something went wrong couldn't get exercise", err})
-    }
+    Modules.find({serviceID: id}, (err, modules)=>{
+        if(err){
+            return res.status(400).json({success: false, error: er})
+        }
+        if(!modules.length){
+            return res.status(404).json({success:false, error:"Oops No modules found"})
+        }
+        return res.status(200).json({success:true, data:modules})
+    })
 }
 
 
