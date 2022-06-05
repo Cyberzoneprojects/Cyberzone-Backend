@@ -1,5 +1,8 @@
 const User = require('../models/user.model')
 const Service = require('../models/service.model')
+const Token = require('../models/token.model')
+const crypto = require('crypto')
+const bcrypt = require('bcrypt')
 
 require('dotenv').config()
 
@@ -120,3 +123,18 @@ module.exports.subscribe = async(req, res, next) =>{
     }
 }
 
+module.exports.requestResetPassword = async(req, res, next) =>{
+    const {email} = req.body
+
+    const user = await User.findOne({email})
+    if (!user) throw new Error("User does not exist");
+
+    const token = await Token.findOne({userId: user._id})
+    if(token) await token.deleteOne()
+
+    // const resetToken = crypto.randomBytes(32).toString('hex')
+    // const salt = await bcrypt.genSalt(10)
+    // const hash = await bcrypt.hash(resetToken, salt)
+    const link = `${clientURL}/passwordReset?token=${resetToken}&id=${user._id}`;
+    sendEmail(user.email,"Password Reset Request",{name: user.name,link: link,}, "./template/requestResetPassword.handlebars");
+}
