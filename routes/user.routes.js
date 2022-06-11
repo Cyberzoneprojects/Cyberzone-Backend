@@ -8,6 +8,8 @@ module.exports = () =>{
     router.post("/register", userValidation, userController.createUser)
     router.post("/login", authController.login)
     router.post("/token", validateToken, authController.token)
+    router.post("/request-reset-password", userController.requestResetPassword)
+    router.post("/reset-password", userController.resetPassword)
 
     router.get("/", userController.getUsers)
     router.get("/:id", isAuthenticated,userController.getUser)

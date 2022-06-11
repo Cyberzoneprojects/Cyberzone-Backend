@@ -152,7 +152,14 @@ module.exports.requestResetPassword = async(req, res, next) =>{
         next({msg: "Oops! something went wrong couldn't request a password reset", err})
     }
 }
-module.exports.passwordReset = async(req, res, next) =>{
+
+/**
+ * @function resetPassword 
+ * verify's if the user is in the system
+ * creates a new password
+ * @params (req, res)
+ */
+module.exports.resetPassword = async(req, res, next) =>{
      try{
         const {userId, resetToken, password} = req.body
         const user = await User.findById(userId)
