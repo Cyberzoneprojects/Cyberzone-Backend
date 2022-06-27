@@ -35,10 +35,12 @@ const userSchema = new mongoose.Schema({
     address:{
         type: String,
     },
+    resetToken:{
+        type: String
+    },
     services_subscribed:{
         type: [String]
     },
-    refreshToken: String,
 }, {timestamps: true})
 
 userSchema.pre('save', async function(next){

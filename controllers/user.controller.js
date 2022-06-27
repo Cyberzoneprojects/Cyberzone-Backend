@@ -1,7 +1,8 @@
 const User = require('../models/user.model')
 const Service = require('../models/service.model')
+const Token = require('../models/token.model')
+const crypto = require('crypto')
 const bcrypt = require('bcrypt')
-const generateToken = require('../utils/generateToken')
 
 require('dotenv').config()
 
@@ -122,32 +123,58 @@ module.exports.subscribe = async(req, res, next) =>{
     }
 }
 
+
 /**
- * @function login to a service
- * Verify if the user exist in the database 
- * Verify password
- * if true 
+ * @function requestResetPassword 
+ * verify's if the user is in the system
+ * creates a reset token then saves the hash in the database
  * @params (req, res)
  */
-module.exports.login = async(req, res, next) =>{
-    try{
-        const {email, password} = req.body
-
+module.exports.requestResetPassword = async(req, res, next) =>{
+     try{
+        const {email} = req.body
         const user = await User.findOne({email})
-        if(!user) return res.status(404).json({status: "failed", msg: "User not found invalid email"})
-       
-        const isPassword = await bcrypt.compare(password, user.password)
-        if(!isPassword) return res.status(404).json({status: "failed", msg: "Invalid password"})
-        
-        const accessToken = generateToken(user._id, email, process.env.SECRET_KEY)
-        const refreshToken = generateToken(user._id, email, process.env.REFRESH_KEY, '7d')
-        
-        const newUser = await User.findByIdAndUpdate(user._id, {$set:{refreshToken}}, {new: true})
-        
-        res.status(200).json({status: "success", data: {...newUser._doc, accessToken, refreshToken}, msg: "Login succesfull"})
+        if (!user) throw new Error("User does not exist");
 
+        // const token = await Token.findOne({userId: user._id})
+        // if(token) await token.deleteOne()
+
+        const resetToken = crypto.randomBytes(32).toString('hex')
+        const salt = await bcrypt.genSalt(10)
+        const hash = await bcrypt.hash(resetToken, salt)
+        await User.findByIdAndUpdate(id, {$set: {resetToken: hash}});
+        
+        const link = `${clientURL}/passwordReset?token=${resetToken}&id=${user._id}`;
+        sendEmail(user.email,"Password Reset Request",{name: user.name,link: link,}, "./template/requestResetPassword.handlebars");
+    
 
     }catch(err){
-        next({msg: "Oops! something went wrong couldn't login user", err})
+        next({msg: "Oops! something went wrong couldn't request a password reset", err})
+    }
+}
+
+/**
+ * @function resetPassword 
+ * verify's if the user is in the system
+ * creates a new password
+ * @params (req, res)
+ */
+module.exports.resetPassword = async(req, res, next) =>{
+     try{
+        const {userId, resetToken, password} = req.body
+        const user = await User.findById(userId)
+        if (!user) throw new Error("User does not exist");
+
+        const isValid = await bcrypt.compare(resetToken, user.resetToken)
+        if(!isValid) throw new Error("Invalid reset token");
+
+        const salt = await bcrypt.genSalt(10)
+        const hashedPassword = await bcrypt.hash(password, salt)
+        await User.findByIdAndUpdate(userId, {$set:{password: hashedPassword}})
+
+        res.status(200).json({status: "success", data: user, msg: "Password reset successfully"})
+
+    }catch(err){
+        next({msg: "Oops! something went wrong couldn't request a password reset", err})
     }
 }
