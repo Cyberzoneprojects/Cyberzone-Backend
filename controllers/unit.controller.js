@@ -45,7 +45,7 @@ module.exports.fetchUnits = async(req, res)=>{
 
 
 /*
- * @function getting a single module if exist
+ * @function getting a single unit if exist
  * @params(req,res)
 
 */
@@ -55,12 +55,12 @@ module.exports.fetchUnit = async(req, res)=>{
     try{
         const {id} = req.params
         const unit = await Units.findById(id)
-        if(!unit) return res.status(404).json({status: "failed", msg: "Exercise not found"})
+        if(!unit) return res.status(404).json({status: "failed", msg: "unit not found"})
 
         res.status(200).json({status: "success", data: unit})
 
     }catch(err){
-        next({msg: "Oops! something went wrong couldn't get exercise", err})
+        next({msg: "Oops! something went wrong couldn't get unit", err})
     }
 }
 

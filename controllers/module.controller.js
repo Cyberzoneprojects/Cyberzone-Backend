@@ -47,7 +47,7 @@ module.exports.fetchModules = (req, res)=>{
  * @params(req,res)
 
 */
-module.exports.fetchModule = async(req, res)=>{
+module.exports.fetchModule = async(req, res, next)=>{
     const {id} = req.params
     Modules.findById(id)
     try{
@@ -56,9 +56,8 @@ module.exports.fetchModule = async(req, res)=>{
         if(!modul) return res.status(404).json({status: "failed", msg: "Exercise not found"})
 
         res.status(200).json({status: "success", data: modul})
-
     }catch(err){
-        next({msg: "Oops! something went wrong couldn't get exercise", err})
+        next({msg: "Oops! something went wrong couldn't get modules", err})
     }
 }
 
