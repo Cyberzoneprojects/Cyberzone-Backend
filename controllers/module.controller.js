@@ -7,20 +7,19 @@ const Modules = require('../models/module.model')
 
 */
 module.exports.saveModule = async(req,res, next)=>{
-    const modul = new Modules(req.body);
-    await modul.save((err, modul)=>{
-        try{
-            if(err){
-                return res.status(400).json({
-                    err
-                })
-            }
-            res.json({
-                modul
-            })
+
+    try{
+        const mod = await Modules.findOne({title: req.body.title})
+        if(mod) return res.status(404).json({status: "failed", msg: "Exercise already exits", mod})
+        
+        const newModule = await Modules.create(req.body)
+        // await Unit.findByIdAndUpdate(unitId, {$addToSet: {exercises: newExercise._id}})
+
+        res.status(201).json({status: "success", data: newModule})
+
     }catch(err){
-        next({msg: "something went wrong", err});
-    }})
+        next({msg: "Oops! something went wrong couldn't create Module", err})
+    }
 }
 
 
