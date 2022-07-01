@@ -13,7 +13,7 @@ const moduleSchema = new mongoose.Schema({
     time_spent:{
         type: String
     },
-    units:{
+    score:{
         type:String
     }
 })

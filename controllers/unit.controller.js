@@ -59,7 +59,28 @@ module.exports.fetchUnit = async(req, res)=>{
         res.status(200).json({status: "success", data: unit})
 
     }catch(err){
-        next({msg: "Oops! something went wrong couldn't get exercise", err})
+        next({msg: "Oops! something went wrong couldn't get units", err})
+    }
+}
+
+
+/*
+ * @function getting all units for a particular module if exist
+ * @params(req,res)
+
+*/
+module.exports.fetchModuleUnit = async(req, res)=>{
+    const {id} = req.params
+    Units.find({module_id: id})
+    try{
+        const {id} = req.params
+        const unit = await Units.find({module_id: id})
+        if(!unit) return res.status(404).json({status: "failed", msg: "Exercise not found"})
+
+        res.status(200).json({status: "success", data: unit})
+
+    }catch(err){
+        next({msg: "Oops! something went wrong couldn't get units", err})
     }
 }
 

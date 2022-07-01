@@ -8,6 +8,8 @@ const Modules = require('../models/module.model')
 */
 module.exports.saveModule = async(req,res, next)=>{
     const modul = new Modules(req.body);
+    const mod = await Modules.findOne({name: req.body.name})
+    if(mod) return res.status(404).json({status: "failed", msg: "Module already exits", mod})
     await modul.save((err, modul)=>{
         try{
             if(err){

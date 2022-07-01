@@ -6,7 +6,7 @@ const PORT = process.env.PORT
 const DATABASE = process.env.DATABASE
 
 module.exports = (app) =>{
-    mongoose.connect(DATABASE, 
+    mongoose.connect(DATABASE,
         {
             useNewUrlParser: true,
             useUnifiedTopology: true,

@@ -1,6 +1,9 @@
 const mongoose = require('mongoose');
 
 const unitSchema = new mongoose.Schema({
+    module_id:{
+        type: String,
+    },
     name:{
         type: String,
     },
