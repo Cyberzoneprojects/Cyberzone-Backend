@@ -13,7 +13,7 @@ const moduleSchema = new mongoose.Schema({
     time_spent:{
         type: String
     },
-    serviceID:{
+    score:{
         type:String
     }
 }, {timestamps: true})

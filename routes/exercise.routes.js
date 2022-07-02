@@ -1,8 +1,9 @@
 const router = require('express').Router()
 const exerciseController = require('../controllers/exercise.controller')
+const { validateCreateExercise } = require('../validations/exercise.validation')
 
 module.exports = () =>{
-    router.post("/create", exerciseController.createExercise)
+    router.post("/create", validateCreateExercise, exerciseController.createExercise)
     router.get("/", exerciseController.getExercises)
     router.get("/:id", exerciseController.getExercise)
     router.put("/:id/update", exerciseController.updateExercise)

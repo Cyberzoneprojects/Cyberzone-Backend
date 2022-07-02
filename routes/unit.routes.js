@@ -3,11 +3,10 @@ const router = require('express').Router()
 
 const modCtrl = require('../controllers/unit.controller')
 module.exports = ()=>{
-    router.post('/', modCtrl.saveUnit)
-    router.get('/', modCtrl.fetchUnits)
-    router.delete('/:id', modCtrl.deleteUnit)
-    router.get('/:id', modCtrl.moduleUnits)
-    router.get('unit/:id', modCtrl.fetchUnit)
-    router.put('/:id', modCtrl.updateUnit)
+    router.post('/unit', modCtrl.saveUnit)
+    router.get('/unit', modCtrl.fetchUnits)
+    router.delete('/unit/:id', modCtrl.deleteUnit)
+    router.get('/unit/:id', modCtrl.fetchModuleUnit)
+    router.put('/unit/:id', modCtrl.updateUnit)
     return router;
 }
