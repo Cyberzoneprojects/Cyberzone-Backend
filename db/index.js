@@ -6,13 +6,16 @@ const PORT = process.env.PORT
 const DATABASE = process.env.DATABASE
 
 module.exports = (app) =>{
-    mongoose.connect(DATABASE, 
+    mongoose.connect(DATABASE,
         {
-            useUnifiedTopology: true
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+            autoIndex: true,
         }, (err)=>{
                 if(err) return console.log("Connection failed", err)
 
-                console.log("DB Connected")
-                app.listen(PORT, ()=>console.log(`Server running on port ${PORT}`))
-    })
+            console.log("DB Connected")
+            app.listen(PORT, () => console.log(`Server running on port ${PORT}`))
+        }
+    )
 }
