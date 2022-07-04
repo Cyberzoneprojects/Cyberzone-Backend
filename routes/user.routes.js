@@ -5,7 +5,7 @@ const isAuthenticated = require('../auth')
 const { userValidation, validateToken } = require('../validations/user.validation')
 
 module.exports = () =>{
-    router.post("/register", userValidation, userController.createUser)
+    router.post("/register",  userController.createUser)
     router.post("/login", authController.login)
     router.post("/token", validateToken, authController.token)
     router.post("/request-reset-password", userController.requestResetPassword)

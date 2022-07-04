@@ -68,7 +68,7 @@ module.exports.fetchModule = async(req, res, next)=>{
 */
 module.exports.fetchModuleOfService = async(req, res, next)=>{
     const {id} = req.params
-    Modules.find({serviceID: id}, (err, modules)=>{
+    Modules.find({service_id: id}, (err, modules)=>{
         if(err){
             return res.status(400).json({success: false, error: er})
         }
