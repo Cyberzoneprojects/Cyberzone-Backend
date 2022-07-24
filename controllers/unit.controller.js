@@ -8,7 +8,7 @@ const Units = require('../models/unit.model')
 */
 module.exports.saveUnit = async(req,res, next)=>{
     console.log(req.body)
-    const unit = new Units(req.body);
+    const unit = new Units(req.body); 
     await unit.save((err, unit)=>{
         try{
             if(err){

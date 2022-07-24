@@ -1,6 +1,6 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
-const exerciseSchema = new mongoose.Schema({
+const answerSchema = new mongoose.Schema({
     question:{
         type: String,
         required: true
@@ -17,7 +17,6 @@ const exerciseSchema = new mongoose.Schema({
         type: String,
         required: true
     }
-}, {timeseries: true})
+})
 
-
-module.exports = mongoose.model('exercise', exerciseSchema)
+module.exports = mongoose.model('answer', answerSchema);
