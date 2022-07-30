@@ -10,7 +10,7 @@ app.use(express.json())
 
 
 
-app.use(routes())
+app.use('/api/v1', routes())
 
 app.use(routes())
 
@@ -18,7 +18,7 @@ app.use(routes())
 
 // Handles 5xx errors
 app.use((err, req, res, next)=>{
-    res.status(500).send(err)
+    res.status(500).json({err: err.message})
 })
 
 connect(app)
