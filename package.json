@@ -33,6 +33,9 @@
     "morgan": "^1.10.0",
     "nodemailer": "^6.7.5",
     "nodemon": "^2.0.16",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "bcryptjs": "^2.4.3",
+    "colors": "^1.4.0",
+    "express-async-handler": "^1.2.0"
   }
 }
