@@ -39,7 +39,7 @@ const userSchema = new mongoose.Schema({
         type: String
     },
     services_subscribed:{
-        type: [String]
+        type: {}
     },
 }, {timestamps: true})
 
