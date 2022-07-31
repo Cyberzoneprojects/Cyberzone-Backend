@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 
 const userSchema = mongoose.Schema(
   {
-    name: {
+    first_name: {
       type: String,
       required: [true, 'Please add a name'],
     },
@@ -27,10 +27,11 @@ const userSchema = mongoose.Schema(
         type: String,
         required:[true, 'Please add your country'],
     },
-    address:{
+    last_name:{
         type: String,
         required: [true, 'Enter your address'],
     },
+    services:[String],
   },
   {
     timestamps: true,
