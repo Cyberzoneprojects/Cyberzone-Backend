@@ -7,13 +7,11 @@ const instructorRoute = require('./instructor.routes')
 const userRoutes = require('./user.routes')
 const exerciseRoutes = require('./exercise.routes')
 const answerRoutes = require('./answers.routes')
-const unitDataRoutes = require('./unitData.routes')
 
 module.exports = () =>{
 
     router.use('/module', moduleRoute())
     router.use('/unit', unitRoute())
-    router.use('/unitData', unitDataRoutes())
 
     router.use('/service', serviceRoute())
     router.use('/instructor', instructorRoute())
