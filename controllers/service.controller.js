@@ -33,6 +33,33 @@ module.exports.getServices = async(req, res, next) =>{
     }
 }
 
+
+/**
+ * @function getServices for getting the list of services
+ * @params (req, res)
+ */
+ module.exports.getSubscribedServices = async(req, res, next) =>{
+    try{
+        const subribedService = await Service.find({subscribe: true})
+        res.status(201).json({status: "success", data: subribedService})
+
+    }catch(err){
+        next({msg: "Oops! something went wrong couldn't get services", err})
+    }
+}
+
+
+module.exports.getunsubscribedServices = async(req, res, next) =>{
+    try{
+        const unsubribedService = await Service.find({subscribe: false})
+        res.status(201).json({status: "success", data: unsubribedService})
+
+    }catch(err){
+        next({msg: "Oops! something went wrong couldn't get services", err})
+    }
+}
+
+
 /**
  * @function getService for getting a single service
  * Verify if the service exist in the database 
@@ -40,6 +67,7 @@ module.exports.getServices = async(req, res, next) =>{
  * @params (req, res)
  */
 module.exports.getService = async(req, res, next) =>{
+    console.log('single Service')
     try{
         const {id} = req.params
         const service = await Service.findById(id)
@@ -51,6 +79,36 @@ module.exports.getService = async(req, res, next) =>{
         next({msg: "Oops! something went wrong couldn't get service", err})
     }
 }
+
+//////////////////////////////////////////
+module.exports.getUserService = async(req, res, next) =>{
+    try{
+        const sid = req.params.sid.split('-')
+        console.log(sid)
+        const serv = []
+        for(let i=0; i<=sid.length-1;i++){
+            serv.push(await Service.findById(sid[i]))
+            console.log('heelo')
+        }
+        // const service = await Service.findById(id)
+        if(!serv) return res.status(404).json({status: "failed", msg: "Service not found"})
+
+        res.status(200).json({status: "success", data: serv})
+        console.log(serv)
+
+
+
+    }catch(err){
+        next({msg: "Oops! something went wrong couldn't get service", err})
+    }
+
+    console.log("hello")
+}
+
+////////////////////////////////
+
+
+
 
 /**
  * @function updateService for updating a service

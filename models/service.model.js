@@ -17,20 +17,7 @@ const serviceSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    modules:{
-        type: [String],
-        required: true
-    },
-    isComplete:{
-        type: String,
-    },
-    isBlocked:{
-        type: String,
-    },
-    subscribers:{
-        type: String,
-    },
-    attestation:{
+    subscribe:{
         type: String,
     },
     resource:{
