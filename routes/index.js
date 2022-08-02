@@ -8,18 +8,20 @@ const userRoutes = require('./user.routes')
 const exerciseRoutes = require('./exercise.routes')
 const struct1Routes = require('./structure1.routes')
 // const clientRoutes = require('./client.routes')
+const answerRoutes = require('./answers.routes')
 
 module.exports = () =>{
-    
+
     router.use('/module', moduleRoute())
     router.use('/unit', unitRoute())
 
     router.use('/service', serviceRoute())
     router.use('/instructor', instructorRoute())
-    
+
     router.use('/user', userRoutes())
     router.use('/exercise', exerciseRoutes())
     router.use('/', struct1Routes())
     // router.use('/client', clientRoutes())
+    router.use('/answer', answerRoutes())
     return router
 }
