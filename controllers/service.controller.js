@@ -83,6 +83,9 @@ module.exports.getService = async(req, res, next) =>{
 //////////////////////////////////////////
 module.exports.getUserService = async(req, res, next) =>{
     try{
+        if(req.params.sid == 'undefined'){
+            return
+        }
         const sid = req.params.sid.split('-')
         console.log(sid)
         const serv = []
