@@ -13,9 +13,15 @@ const moduleSchema = new mongoose.Schema({
     time_spent:{
         type: String
     },
+    service_id: {
+        type:String
+    },
+    serviceID: {
+        type:String
+    },
     score:{
         type:String
     }
-})
+}, {timestamps: true})
 
 module.exports = mongoose.model('module', moduleSchema);

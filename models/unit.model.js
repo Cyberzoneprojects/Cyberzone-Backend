@@ -6,34 +6,31 @@ const unitSchema = new mongoose.Schema({
     },
     name:{
         type: String,
+        require: true
     },
     title:{
         type: String,
+        require: true
     },
     image:{
         type:String,
+        require: true
     },
     time_spent:{
         type: String,
+        require: true
     },
-    excercises:[String],
     isViewed:{
         type:Boolean,
     },
     video:{
         type:String,
+        require:true
     },
-    number_of_question:{
-        type: String,
-    },
-    time:{
-        type: String,
-    },
-    unit_content:{
-        type: [Object],
-        blackbox: true
+    moduleID:{
+        type:String,
+        require: true
     }
-
-})
+},{timestamps:true})
 
 module.exports = mongoose.model('unit', unitSchema);

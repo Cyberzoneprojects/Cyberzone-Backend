@@ -178,3 +178,30 @@ module.exports.resetPassword = async(req, res, next) =>{
         next({msg: "Oops! something went wrong couldn't request a password reset", err})
     }
 }
+
+
+module.exports.signinUser = (req, res)=>{
+    const {email, password}=req.body;
+    User.findOne({email}, (err,user)=>{
+        if(err || !user){
+            return res.status(400).json({
+                error: "User email does not exist. Please signup"
+            });
+        }
+
+        if(!user.authenticate(password)){
+            return res.status(401).json({
+                error:"Email and password don't match"
+            });
+        }
+
+
+
+
+        const token = jwt.sign({_id:user._id}, process.env.JWT_SECRET)
+
+        res.cookie('tok', token, {expire: new Date()+9999})
+        const {_id, name, email, role} = user
+        return res.json({token, user:{_id, name, email, role}})
+    })
+}
