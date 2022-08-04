@@ -7,22 +7,17 @@ const Units = require('../models/unit.model')
  * @params(req,res, next)
 
 */
-module.exports.saveUnit = async(req,res, next)=>{
+module.exports.saveUnit = async (req, res, next) => {
     console.log(req.body)
-    const unit = new Units(req.body);
-    await unit.save((err, unit)=>{
-        try{
-            if(err){
-                return res.status(400).json({
-                    err
-                })
-            }
-            res.json({
-                unit
-            })
+    try {
+        const unitExist = Units.findOne({ title: req.body.title })
+        if (unitExist) return res.status(404).json({ status: "failed", msg: "unit already exits", service })
+        // const unit = new Units();
+        const newUnit = Units.create(req.body)
+        res.status(201).json({status: "success", data: newUnit})
     }catch(err){
-        next({msg: "something went wrong", err});
-    }})
+        next({msg: "Oops! something went wrong couldn't create unit", err})
+    }
 }
 
 /*
@@ -31,15 +26,15 @@ module.exports.saveUnit = async(req,res, next)=>{
 
 */
 
-module.exports.fetchUnits = async(req, res)=>{
-    Units.find({}, (err, units)=>{
-        if(err){
-            return res.status(400).json({success: false, error: err})
+module.exports.fetchUnits = async (req, res) => {
+    Units.find({}, (err, units) => {
+        if (err) {
+            return res.status(400).json({ success: false, error: err })
         }
-        if(units.lenght){
-            return res.status(404).json({success:false, error:"Oops No modules found"})
+        if (units.lenght) {
+            return res.status(404).json({ success: false, error: "Oops No modules found" })
         }
-        return res.status(200).json({success:true, data:units})
+        return res.status(200).json({ success: true, data: units })
     })
 }
 
@@ -49,18 +44,18 @@ module.exports.fetchUnits = async(req, res)=>{
  * @params(req,res)
 
 */
-module.exports.fetchUnit = async(req, res)=>{
-    const {id} = req.params
+module.exports.fetchUnit = async (req, res) => {
+    const { id } = req.params
     Units.findById(id)
-    try{
-        const {id} = req.params
+    try {
+        const { id } = req.params
         const unit = await Units.findById(id)
-        if(!unit) return res.status(404).json({status: "failed", msg: "unit not found"})
+        if (!unit) return res.status(404).json({ status: "failed", msg: "unit not found" })
 
-        res.status(200).json({status: "success", data: unit})
+        res.status(200).json({ status: "success", data: unit })
 
-    }catch(err){
-        next({msg: "Oops! something went wrong couldn't get units bbb", err})
+    } catch (err) {
+        next({ msg: "Oops! something went wrong couldn't get units bbb", err })
     }
 }
 
@@ -70,18 +65,18 @@ module.exports.fetchUnit = async(req, res)=>{
  * @params(req,res)
 
 */
-module.exports.fetchModuleUnit = async(req, res)=>{
-    const {id} = req.params
-    Units.find({module_id: id})
-    try{
-        const {id} = req.params
-        const unit = await Units.find({module_id: id})
-        if(!unit) return res.status(404).json({status: "failed", msg: "Exercise not found"})
+module.exports.fetchModuleUnit = async (req, res) => {
+    const { id } = req.params
+    Units.find({ module_id: id })
+    try {
+        const { id } = req.params
+        const unit = await Units.find({ module_id: id })
+        if (!unit) return res.status(404).json({ status: "failed", msg: "Exercise not found" })
 
-        res.status(200).json({status: "success", data: unit})
+        res.status(200).json({ status: "success", data: unit })
 
-    }catch(err){
-        next({msg: "Oops! something went wrong couldn't get units ffff", err})
+    } catch (err) {
+        next({ msg: "Oops! something went wrong couldn't get units ffff", err })
     }
 }
 
@@ -93,16 +88,16 @@ module.exports.fetchModuleUnit = async(req, res)=>{
 
 */
 
-module.exports.moduleUnits = async(req, res)=>{
-    const {id} = req.params
-    Units.find({moduleID: id}, (err, units)=>{
-        if(err){
-            return res.status(400).json({success: false, error: err})
+module.exports.moduleUnits = async (req, res) => {
+    const { id } = req.params
+    Units.find({ moduleID: id }, (err, units) => {
+        if (err) {
+            return res.status(400).json({ success: false, error: err })
         }
-        if(units.lenght){
-            return res.status(404).json({success:false, error:"Oops No Units found"})
+        if (units.lenght) {
+            return res.status(404).json({ success: false, error: "Oops No Units found" })
         }
-        return res.status(200).json({success:true, data:units})
+        return res.status(200).json({ success: true, data: units })
     })
 };
 
@@ -114,54 +109,54 @@ module.exports.moduleUnits = async(req, res)=>{
 module.exports.deleteUnit = (req, res, next) => {
     Units.findByIdAndRemove(
         req.params.id, (error, data) => {
-      if (error) {
-        return next(error);
-      } else {
-        res.status(200).json({
-          msg: data,
+            if (error) {
+                return next(error);
+            } else {
+                res.status(200).json({
+                    msg: data,
+                });
+            }
         });
-      }
-    });
-  };
+};
 
 
-  /*
- * @function updating a unit if exist
- * @params(req,res, next)
+/*
+* @function updating a unit if exist
+* @params(req,res, next)
 
 */
 
-  module.exports.updateUnit = async(req, res, next)=> {
-    try{
-        const {id} = req.params
+module.exports.updateUnit = async (req, res, next) => {
+    try {
+        const { id } = req.params
         const unit = await Units.findById(id)
-        if(!unit) return res.status(404).json({status: "failed", msg: "Unit not found"})
+        if (!unit) return res.status(404).json({ status: "failed", msg: "Unit not found" })
 
-        const updatedUser = await Units.findByIdAndUpdate(id, {$set:req.body}, {new: true})
-        res.status(200).json({status: "success", data: updatedUser})
+        const updatedUser = await Units.findByIdAndUpdate(id, { $set: req.body }, { new: true })
+        res.status(200).json({ status: "success", data: updatedUser })
 
-    }catch(err){
-        next({msg: "something went wrong", err})
+    } catch (err) {
+        next({ msg: "something went wrong", err })
     }
-  }
+}
 
 
-  /*
- * @function getting a single unit method 2
- * @params(req,res)
+/*
+* @function getting a single unit method 2
+* @params(req,res)
 
 */
-module.exports.fetchUnitsData = async(req, res)=>{
-    const {id} = req.params
-    Units.find({_id: id})
-    try{
-        const {id} = req.params
-        const unit = await Units.find({_id: id})
-        if(!unit) return res.status(404).json({status: "failed", msg: "Exercise not found"})
+module.exports.fetchUnitsData = async (req, res) => {
+    const { id } = req.params
+    Units.find({ _id: id })
+    try {
+        const { id } = req.params
+        const unit = await Units.find({ _id: id })
+        if (!unit) return res.status(404).json({ status: "failed", msg: "Exercise not found" })
 
-        res.status(200).json({status: "success", data: unit})
+        res.status(200).json({ status: "success", data: unit })
 
-    }catch(err){
-        next({msg: "Oops! something went wrong couldn't get units ccc", err})
+    } catch (err) {
+        next({ msg: "Oops! something went wrong couldn't get units ccc", err })
     }
 }

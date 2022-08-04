@@ -13,8 +13,6 @@ module.exports.saveModule = async(req,res, next)=>{
         if(mod) return res.status(404).json({status: "failed", msg: "Exercise already exits", mod})
         
         const newModule = await Modules.create(req.body)
-        // await Unit.findByIdAndUpdate(unitId, {$addToSet: {exercises: newExercise._id}})
-
         res.status(201).json({status: "success", data: newModule})
 
     }catch(err){
