@@ -9,7 +9,7 @@ const Units = require('../models/unit.model')
 */
 module.exports.saveUnit = async(req,res, next)=>{
     console.log(req.body)
-    const unit = new Units(req.body); 
+    const unit = new Units(req.body);
     await unit.save((err, unit)=>{
         try{
             if(err){
@@ -60,7 +60,7 @@ module.exports.fetchUnit = async(req, res)=>{
         res.status(200).json({status: "success", data: unit})
 
     }catch(err){
-        next({msg: "Oops! something went wrong couldn't get units", err})
+        next({msg: "Oops! something went wrong couldn't get units bbb", err})
     }
 }
 
@@ -81,7 +81,7 @@ module.exports.fetchModuleUnit = async(req, res)=>{
         res.status(200).json({status: "success", data: unit})
 
     }catch(err){
-        next({msg: "Oops! something went wrong couldn't get units", err})
+        next({msg: "Oops! something went wrong couldn't get units ffff", err})
     }
 }
 
@@ -144,3 +144,24 @@ module.exports.deleteUnit = (req, res, next) => {
         next({msg: "something went wrong", err})
     }
   }
+
+
+  /*
+ * @function getting a single unit method 2
+ * @params(req,res)
+
+*/
+module.exports.fetchUnitsData = async(req, res)=>{
+    const {id} = req.params
+    Units.find({_id: id})
+    try{
+        const {id} = req.params
+        const unit = await Units.find({_id: id})
+        if(!unit) return res.status(404).json({status: "failed", msg: "Exercise not found"})
+
+        res.status(200).json({status: "success", data: unit})
+
+    }catch(err){
+        next({msg: "Oops! something went wrong couldn't get units ccc", err})
+    }
+}
