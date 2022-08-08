@@ -5,20 +5,26 @@ const Units = require('../models/unit.model')
 /*
  * @function Creating/saving a new unit
  * @params(req,res, next)
-
 */
-module.exports.saveUnit = async (req, res, next) => {
-    console.log(req.body)
-    try {
-        const unitExist = Units.findOne({ title: req.body.title })
-        if (unitExist) return res.status(404).json({ status: "failed", msg: "unit already exits", service })
-        // const unit = new Units();
-        const newUnit = Units.create(req.body)
+
+module.exports.saveUnit = async(req,res, next)=>{
+    try{
+        const unitExist = await Units.findOne({title: req.body.title})
+        if(unitExist) return res.status(404).json({status: "failed", msg: "unit already exits", unitExist})
+
+        const newUnit = await Units.create(req.body)
         res.status(201).json({status: "success", data: newUnit})
+
     }catch(err){
-        next({msg: "Oops! something went wrong couldn't create unit", err})
+        next({msg: "Oops! something went wrong couldn't create Module", err})
     }
 }
+
+
+
+
+
+
 
 /*
  * @function getting all units if exist
@@ -146,7 +152,7 @@ module.exports.updateUnit = async (req, res, next) => {
 * @params(req,res)
 
 */
-module.exports.fetchUnitsData = async (req, res) => {
+module.exports.fetchUnitsData = async (req, res, next) => {
     const { id } = req.params
     Units.find({ _id: id })
     try {

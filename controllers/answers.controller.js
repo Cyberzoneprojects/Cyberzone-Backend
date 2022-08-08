@@ -46,3 +46,37 @@ module.exports.getAnswers = async(req, res)=>{
 }
 
 
+/* delete questions */
+
+module.exports.deleteQuestion = (req, res, next) => {
+    Answer.findByIdAndRemove(
+        req.params.id, (error, data) => {
+      if (error) {
+        return next(error);
+      } else {
+        res.status(200).json({
+          msg: data,
+        });
+      }
+    });
+  };
+
+
+/*
+ * @function Updates a module if exist
+ * @params(req,res, next)
+*/
+
+module.exports.updateQuestion = async(req, res, next)=> {
+    try{
+        const {id} = req.params
+        const answer = await Answer.findById(id)
+        if(!answer) return res.status(404).json({status: "failed", msg: "Module not found"})
+
+        const updatedAnswer = await Answer.findByIdAndUpdate(id, {$set:req.body}, {new: true})
+        res.status(200).json({status: "success", data: updatedAnswer})
+
+    }catch(err){
+        next({msg: "something went wrong", err})
+    }
+  }

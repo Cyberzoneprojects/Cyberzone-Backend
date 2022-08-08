@@ -5,7 +5,7 @@ const colors = require('colors');
 const { errorHandler } = require('./middleware/errorMiddleware');
 const connectDB = require('./config/db');
 const multer = require('multer')
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 7000;
 
 connectDB();
 const app = express()
@@ -41,6 +41,28 @@ app.post("/api/v1/upload", upload.single('myFile'), (req, res,next)=>{
 app.get('/api/v1/upload')
 app.use('/api/v1/images', express.static('images'))
 /////////////////////////////////////////////////////////////////
+
+
+///////////////  videos upload ///////////////////
+/// Setting up the storage
+var storage2 = multer.diskStorage({
+    destination: './videos',
+    filename: function(req, file, cb){
+        cb(null, file.originalname);
+    }
+})
+const uploadVideo = multer({storage: storage2})
+app.use(express.static(__dirname + "/../build"))
+
+/// Route for file upload
+app.post("/api/v1/uploadVideo", uploadVideo.single('myFile'), (req, res,next)=>{
+    res.sendStatus(200);
+})
+//// route for getting files from the server
+app.get('/api/v1/uploadVideo')
+app.use('/api/v1/videos', express.static('videos'))
+/////////////////////////////////////////////////////////////////
+
 
 app.use(errorHandler);
 

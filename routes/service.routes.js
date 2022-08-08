@@ -8,7 +8,8 @@ module.exports = () =>{
     router.get("/unsubscribed", serviceController.getunsubscribedServices)
     router.get("/:id", serviceController.getService)
     router.get("/user/:sid", serviceController.getUserService)
-    router.put("/:id/update", serviceController.updateService)
-    router.delete("/:id/remove", serviceController.removeService)
+    router.put("/update/:id", serviceController.updateService)
+    // router.delete("/:id/remove", serviceController.removeService)
+    router.delete('/:id', serviceController.removeService)
     return router
 }

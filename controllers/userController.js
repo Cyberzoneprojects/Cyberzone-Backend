@@ -112,7 +112,7 @@ const updateUser = async(req, res, next) =>{
 
 // Generate JWT
 const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, {
+  return jwt.sign({ id }, "dfkjlfeiufeoipergnsjhdiewrgnjkvoshgs", {
     expiresIn: '30d',
   })
 }

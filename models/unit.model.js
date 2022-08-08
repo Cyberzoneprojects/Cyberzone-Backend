@@ -4,10 +4,6 @@ const unitSchema = new mongoose.Schema({
     module_id:{
         type: String,
     },
-    name:{
-        type: String,
-        require: true
-    },
     title:{
         type: String,
         require: true
@@ -18,18 +14,24 @@ const unitSchema = new mongoose.Schema({
     },
     time_spent:{
         type: String,
-        require: true
     },
     isViewed:{
         type:Boolean,
     },
     video:{
         type:String,
-        require:true
     },
-    moduleID:{
+    number_of_question:{
         type:String,
-        require: true
+    },
+    time:{
+        type:String,
+    },
+    unit_content:{
+        type:[Object],
+    },
+    unit_content:{
+        type:[Object],
     }
 },{timestamps:true})
 

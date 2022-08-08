@@ -31,7 +31,7 @@ const userSchema = mongoose.Schema(
         type: String,
         required: [true, 'Enter your address'],
     },
-    services:[String],
+    services:[Object],
   },
   {
     timestamps: true,
