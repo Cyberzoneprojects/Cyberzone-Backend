@@ -21,6 +21,9 @@ const moduleSchema = new mongoose.Schema({
     },
     score:{
         type:String
+    },
+    units:{
+        type: [Object],
     }
 }, {timestamps: true})
 

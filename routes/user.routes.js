@@ -14,6 +14,7 @@ module.exports = () =>{
     router.get("/", userController.getUsers)
     router.get("/:id", isAuthenticated,userController.getUser)
     router.put("/:id/update", userController.updateUser)
+    router.put("/:id/updates", userController.updateUsers)
     router.delete("/:id/remove", userController.removeUser)
 
     router.put("/subscribe", userController.subscribe)

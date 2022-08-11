@@ -66,7 +66,6 @@ module.exports.getunsubscribedServices = async(req, res, next) =>{
  * @params (req, res)
  */
 module.exports.getService = async(req, res, next) =>{
-    console.log('single Service')
     try{
         const {id} = req.params
         const service = await Service.findById(id)

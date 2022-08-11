@@ -135,6 +135,7 @@ module.exports.deleteUnit = (req, res, next) => {
 module.exports.updateUnit = async (req, res, next) => {
     try {
         const { id } = req.params
+        console.log(req.body)
         const unit = await Units.findById(id)
         if (!unit) return res.status(404).json({ status: "failed", msg: "Unit not found" })
 

@@ -7,7 +7,7 @@ const instructorRoute = require('./instructor.routes')
 const userRoutes = require('./user.routes')
 const exerciseRoutes = require('./exercise.routes')
 const struct1Routes = require('./structure1.routes')
-// const clientRoutes = require('./client.routes')
+const servRoutes = require('./serv.routes')
 const answerRoutes = require('./answers.routes')
 
 module.exports = () =>{
@@ -18,6 +18,9 @@ module.exports = () =>{
     router.use('/service', serviceRoute())
     router.use('/instructor', instructorRoute())
 
+
+    router.use('/serv', servRoutes())
+
     router.use('/user', userRoutes())
     router.use('/exercise', exerciseRoutes())
     router.use('/', struct1Routes())
@@ -25,3 +28,4 @@ module.exports = () =>{
     router.use('/answer', answerRoutes())
     return router
 }
+

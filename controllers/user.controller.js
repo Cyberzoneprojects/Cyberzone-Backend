@@ -15,7 +15,7 @@ module.exports.createUser = async(req, res, next) =>{
     try{
         const user = await User.findOne({email: req.body.email})
         if(user) return res.status(404).json({status: "failed", msg: "User already exits", user})
-        
+
         const newUser = await User.create(req.body)
         res.status(201).json({status: "success", data: newUser})
 
@@ -67,6 +67,7 @@ module.exports.getUser = async(req, res, next) =>{
 module.exports.updateUser = async(req, res, next) =>{
     try{
         const {id} = req.params
+        console.log(req)
         const user = await User.findById(id)
         if(!user) return res.status(404).json({status: "failed", msg: "User not found"})
 
@@ -125,7 +126,7 @@ module.exports.subscribe = async(req, res, next) =>{
 
 
 /**
- * @function requestResetPassword 
+ * @function requestResetPassword
  * verify's if the user is in the system
  * creates a reset token then saves the hash in the database
  * @params (req, res)
@@ -143,10 +144,10 @@ module.exports.requestResetPassword = async(req, res, next) =>{
         const salt = await bcrypt.genSalt(10)
         const hash = await bcrypt.hash(resetToken, salt)
         await User.findByIdAndUpdate(id, {$set: {resetToken: hash}});
-        
+
         const link = `${clientURL}/passwordReset?token=${resetToken}&id=${user._id}`;
         sendEmail(user.email,"Password Reset Request",{name: user.name,link: link,}, "./template/requestResetPassword.handlebars");
-    
+
 
     }catch(err){
         next({msg: "Oops! something went wrong couldn't request a password reset", err})
@@ -154,7 +155,7 @@ module.exports.requestResetPassword = async(req, res, next) =>{
 }
 
 /**
- * @function resetPassword 
+ * @function resetPassword
  * verify's if the user is in the system
  * creates a new password
  * @params (req, res)
@@ -178,6 +179,23 @@ module.exports.resetPassword = async(req, res, next) =>{
         next({msg: "Oops! something went wrong couldn't request a password reset", err})
     }
 }
+
+
+module.exports.updateUsers = async (req, res, next) => {
+    try {
+        console.log(body)
+        const { id } = req.params
+        const unit = await User.findById(id)
+        if (!unit) return res.status(404).json({ status: "failed", msg: "Unit not found" })
+
+        const updatedUser = await User.findByIdAndUpdate(id, { $set: req.body }, { new: true })
+        res.status(200).json({ status: "success", data: updatedUser })
+
+    } catch (err) {
+        next({ msg: "something went wrong", err })
+    }
+}
+
 
 
 module.exports.signinUser = (req, res)=>{

@@ -15,6 +15,9 @@ const unitSchema = new mongoose.Schema({
     time_spent:{
         type: String,
     },
+    score:{
+        type: String,
+    },
     isViewed:{
         type:Boolean,
     },
@@ -24,10 +27,13 @@ const unitSchema = new mongoose.Schema({
     number_of_question:{
         type:String,
     },
+    questions_time:{
+        type:String,
+    },
     time:{
         type:String,
     },
-    unit_content:{
+    unit_home_content:{
         type:[Object],
     },
     unit_content:{
