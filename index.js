@@ -5,6 +5,8 @@ const colors = require('colors');
 const { errorHandler } = require('./middleware/errorMiddleware');
 const connectDB = require('./config/db');
 const port = process.env.PORT || 5000;
+const passwordReset = require("./routes/passwordReset");
+
 
 connectDB();
 const app = express()
@@ -16,6 +18,7 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use('/api/v1', routes())
 app.use('/api/v1/users', require('./routes/userRoutes'));
+// app.use("/api/v1/password-reset", passwordReset);
 app.use(routes())
 // Handles 5xx errors
 app.use((err, req, res, next)=>{

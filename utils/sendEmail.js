@@ -8,11 +8,11 @@ const sendEmail = async (email, subject, payload, template) => {
   try {
     // create reusable transporter object using the default SMTP transport
     const transporter = nodemailer.createTransport({
-      host: process.env.EMAIL_HOST,
+      host: 'hotmail',
       port: 465,
       auth: {
-        user: process.env.EMAIL_USERNAME,
-        pass: process.env.EMAIL_PASSWORD, // naturally, replace both with your real credentials or an application-specific password
+        user: 'fvenyuy@outlook.com',
+        pass: 'fev3@!fev3', // naturally, replace both with your real credentials or an application-specific password
       },
     });
 
@@ -20,8 +20,8 @@ const sendEmail = async (email, subject, payload, template) => {
     const compiledTemplate = handlebars.compile(source);
     const options = () => {
       return {
-        from: process.env.FROM_EMAIL,
-        to: email,
+        from: 'fvenyuy@outlook.com',
+        to: 'fonchu.e.venyuy@gmail.com',
         subject: subject,
         html: compiledTemplate(payload),
       };

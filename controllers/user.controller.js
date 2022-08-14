@@ -133,7 +133,9 @@ module.exports.subscribe = async(req, res, next) =>{
 module.exports.requestResetPassword = async(req, res, next) =>{
      try{
         const {email} = req.body
+        
         const user = await User.findOne({email})
+        console.log(user)
         if (!user) throw new Error("User does not exist");
 
         // const token = await Token.findOne({userId: user._id})
@@ -145,11 +147,12 @@ module.exports.requestResetPassword = async(req, res, next) =>{
         await User.findByIdAndUpdate(id, {$set: {resetToken: hash}});
         
         const link = `${clientURL}/passwordReset?token=${resetToken}&id=${user._id}`;
-        sendEmail(user.email,"Password Reset Request",{name: user.name,link: link,}, "./template/requestResetPassword.handlebars");
+        sendEmail(user.email,"Password Reset Request",{name: user.first_name,link: link,}, "./template/requestResetPassword.handlebars");
     
 
     }catch(err){
         next({msg: "Oops! something went wrong couldn't request a password reset", err})
+        console.log('fhd')
     }
 }
 
@@ -167,8 +170,8 @@ module.exports.resetPassword = async(req, res, next) =>{
 
         const isValid = await bcrypt.compare(resetToken, user.resetToken)
         if(!isValid) throw new Error("Invalid reset token");
-
         const salt = await bcrypt.genSalt(10)
+
         const hashedPassword = await bcrypt.hash(password, salt)
         await User.findByIdAndUpdate(userId, {$set:{password: hashedPassword}})
 
